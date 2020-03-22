@@ -81,6 +81,21 @@ def search(name):
         return f'Error, {e}'
 
 
+def list_of_subtitles(url):
+    try:
+        response = requests.get(url)
+        soup = bs4(response.text, 'html.parser')
+        items = soup.find_all('td', {'class': 'a1'})
+        subtitle_list = dict()
+        for item in items:
+            name = item.find_all('span')[-1].text.strip()
+            link = item.find('a')['href']
+            subtitle_list[name] = base_url + link
+        return subtitle_list
+    except Exception as e:
+        return f'Error, {e}'
+
+
 def download(url, file_name=None):
     response = requests.get(url)
     try:
